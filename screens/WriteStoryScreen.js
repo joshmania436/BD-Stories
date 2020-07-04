@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import {Header} from 'react-native-elements';
+import db from '../config';
 
 export default class WriteStoryScreen extends React.Component {
     constructor(props){
@@ -12,6 +13,21 @@ export default class WriteStoryScreen extends React.Component {
             storyText: '',
         }
     }
+     
+     submitStory=()=>{
+         var submitStory
+         db.collection('stories').add({
+             'title':this.state.title,
+             'author':this.state.author,
+             'storyText':this.add.storyText,
+             'date':firebase.firestore.Timestamp.now().toDate(),
+         })
+         this.setState({
+            title: '',
+            author: '',
+            storyText: ''
+        })
+     }
 
     render(){
         return(
@@ -86,9 +102,9 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignSelf: 'center',
       backgroundColor: 'black',
-      width: 180,
-      height: 90,
-      borderRadius:150
+      width: 120,
+      borderRadius:150,
+      height: 70
   },
   buttonText: {
       textAlign: 'center',

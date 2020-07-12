@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity,ToastAndroid,KeyboardAvoidingView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import {Header} from 'react-native-elements';
 import db from '../config';
@@ -15,23 +15,23 @@ export default class WriteStoryScreen extends React.Component {
     }
      
      submitStory=()=>{
-         var submitStory
          db.collection('stories').add({
-             'title':this.state.title,
-             'author':this.state.author,
-             'storyText':this.add.storyText,
-             'date':firebase.firestore.Timestamp.now().toDate(),
+             title:this.state.title,
+             author:this.state.author,
+             storyText:this.add.storyText,
+             date:firebase.firestore.Timestamp.now().toDate(),
          })
          this.setState({
             title: '',
             author: '',
             storyText: ''
         })
+        ToastAndroid.show('Your story has been submitted. Thank You! :D ', ToastAndroid.SHORT)
      }
 
     render(){
         return(
-            <View style={styles.container}>
+            <KeyboardAvoidingView style ={styles.container} behaviour ="padding" enabled>
                 <Header 
                     backgroundColor = {'black'}
                     centerComponent = {{
@@ -72,7 +72,7 @@ export default class WriteStoryScreen extends React.Component {
                     style={styles.submitButton}>
                     <Text style={styles.buttonText}>Submit</Text>
                 </TouchableOpacity>
-            </View>
+                </KeyboardAvoidingView>
         );
     }
 }

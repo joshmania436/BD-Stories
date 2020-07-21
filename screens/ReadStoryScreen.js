@@ -1,11 +1,7 @@
-  import React from 'react';
-import { StyleSheet, Text, View ,FlatList,ScrollView} from 'react-native';
-import {SearchBar} from 'react-native-elements';
-import {Header} from 'react-native-elements';
+import React from 'react';
+import { StyleSheet, Text, View ,FlatList} from 'react-native';
+import {SearchBar,Header} from 'react-native-elements';
 import db from '../config'
-
-
-
 
 export default class ReadStoryScreen extends React.Component {
   constructor(){
@@ -31,6 +27,7 @@ export default class ReadStoryScreen extends React.Component {
       var stories = db.collection("stories")
         .get().then((querySnapshot)=> {
           querySnapshot.forEach((doc)=> {
+              
               allStories.push(doc.data())
               console.log('this are the stories',allStories)
           })
@@ -59,7 +56,7 @@ export default class ReadStoryScreen extends React.Component {
       return(
         <View style ={styles.container}>
            <Header 
-                backgroundColor = {'pink'}
+                backgroundColor = {'black'}
                 centerComponent = {{
                     text : 'Bed Time Stories',
                     style : { color: 'white', fontSize: 20}
@@ -74,37 +71,16 @@ export default class ReadStoryScreen extends React.Component {
             />
           </View>
           
-          <ScrollView>
-              <View>
-                {
-                  this.state.search === "" ? 
-                    this.state.allStories.map((item)=>(
-                      <View style={{borderColor:'pink',borderWidth:2,padding:10,alignItems:'center',margin:30}}>
-                        <Text>
-                          Title : {item.title}
-                        </Text>
-                        <Text>
-                          Author : {item.author}
-                        </Text>
-                      </View>
-                    ))
-                  :
-                  this.state.dataSource.map((item)=>(
-                    <View style={{borderColor:'pink',borderWidth:2,padding:10,alignItems:'center',margin:30}}>
-                      <Text>
-                       Title : {item.title}
-                      </Text>
-                      <Text>
-                       Author : {item.author}
-                      </Text>
-                    </View>
-                  ))
-                }
-              </View>
-          </ScrollView> 
-          
-          
-          
+          <FlatList
+                data={this.state.search === "" ?  this.state.allStories: this.state.dataSource}
+                renderItem={({ item }) => (
+                  <View style={styles.itemContainer}>
+                    <Text>  Title: {item.title}</Text>
+                    <Text>  Author : {item.author}</Text>
+                  </View>
+                )}
+                keyExtractor={(item, index) => index.toString()}
+                />
         </View>  
       );      
     }
@@ -116,7 +92,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   item: {
-    backgroundColor: 'pink',
+    backgroundColor: 'black',
     padding:10,
     marginVertical: 8,
     marginHorizontal: 16,
@@ -128,7 +104,7 @@ const styles = StyleSheet.create({
     height: 80,
     width:'100%',
     borderWidth: 2,
-    borderColor: 'pink',
+    borderColor: 'black',
     justifyContent:'center',
     alignSelf: 'center',
   }
